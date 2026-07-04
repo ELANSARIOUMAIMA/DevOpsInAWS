@@ -86,3 +86,7 @@ kubectl=1.28.1-1.1
 ```
 
 This ensures that all Kubernetes components use the same version (**v1.28.1**), avoiding potential issues caused by installing the latest available release.
+### 9. Initialize the Kubernetes Cluster
+
+```bash
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16

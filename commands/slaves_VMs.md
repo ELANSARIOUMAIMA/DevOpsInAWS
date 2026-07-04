@@ -68,5 +68,24 @@ chmod +x install_K8s.sh
 ./install_K8s.sh
 ```
 
----
+### 7. Install Kubernetes Components
+
+> **Note:** Using the latest Kubernetes version may sometimes introduce compatibility issues or bugs. For a stable and reproducible environment, it is often preferable to install a specific version.
+
+Update package repositories:
+
+```bash
+sudo apt update
+```
+
+Install Kubernetes components with a fixed version:
+
+```bash
+sudo apt install -y kubeadm=1.28.1-1.1 \
+kubelet=1.28.1-1.1 \
+kubectl=1.28.1-1.1
+```
+
+This ensures that all Kubernetes components use the same version (**v1.28.1**), avoiding potential issues caused by installing the latest available release.
+
 

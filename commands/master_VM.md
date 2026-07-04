@@ -143,3 +143,63 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 * **Ingress NGINX** → Manages incoming HTTP/HTTPS traffic and routes it to Kubernetes Services.
 * **kubectl configuration** → Allows the current user to interact with the cluster without using `sudo`.
 
+
+## Verify Cluster Status
+
+Check that all nodes have successfully joined the cluster.
+
+```bash
+kubectl get nodes
+```
+
+This command displays the status of the control plane and worker nodes.
+
+---
+
+## Kubernetes Security Audit with kubeaudit
+
+Although **Trivy** can scan Kubernetes resources, it may not always fit every environment or use case. As an alternative, **kubeaudit** can be used to audit the cluster against Kubernetes security best practices.
+
+### Install kubeaudit
+
+Download the release package:
+
+```bash
+wget https://github.com/Shopify/kubeaudit/releases/download/v0.22.2/kubeaudit_0.22.2_linux_amd64.tar.gz
+```
+
+Extract the archive:
+
+```bash
+tar -xvzf kubeaudit_0.22.2_linux_amd64.tar.gz
+```
+
+Move the binary to a directory included in the system PATH:
+
+```bash
+sudo mv kubeaudit /usr/local/bin/
+```
+
+Verify the installation:
+
+```bash
+kubeaudit version
+```
+
+Run a complete security audit:
+
+```bash
+kubeaudit all
+```
+
+### Notes
+
+* `kubectl get nodes` verifies that the cluster is operational.
+* `kubeaudit` checks Kubernetes resources for security misconfigurations.
+* `kubeaudit all` runs all available audit checks.
+* Trivy and kubeaudit are complementary tools and can both be used in Kubernetes security assessments.
+
+
+
+
+

@@ -68,7 +68,7 @@ chmod +x install_K8s.sh
 ./install_K8s.sh
 ```
 
-### 7. Install Kubernetes Components
+### 8. Install Kubernetes Components
 
 > **Note:** Using the latest Kubernetes version may sometimes introduce compatibility issues or bugs. For a stable and reproducible environment, it is often preferable to install a specific version.
 

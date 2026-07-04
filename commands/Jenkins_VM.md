@@ -176,31 +176,60 @@ Install the following plugins from:
 
 ---
 
-## Configure JDK
+## Configure Global Tools
 
 Navigate to:
 
 ```text
 Manage Jenkins
     └── Tools
-         └── JDK Installations
 ```
 
-Add a JDK configuration:
+Configure the following tools:
+
+### JDK Configuration
 
 ```text
 Name: jdk17
 ```
 
-Using the **Eclipse Temurin Installer** plugin, Jenkins can automatically download and manage JDK versions.
+Install automatically using the **Eclipse Temurin Installer** plugin.
+
+### Maven Configuration
+
+```text
+Name: maven3
+```
+
+Install automatically and select the desired Maven version.
+
+### SonarQube Scanner Configuration
+
+```text
+Name: sonar-scanner
+```
+
+Install automatically and select the latest available version.
+
+### Docker Configuration
+
+```text
+Name: docker
+```
+
+Configure the Docker installation to allow Jenkins pipelines to execute Docker commands.
 
 ---
 
 ## Notes
 
-* The **Eclipse Temurin Installer** plugin simplifies JDK management.
-* **Config File Provider** is commonly used to create and manage Maven `settings.xml`.
-* **Pipeline Maven Integration** enables Maven builds within Jenkins Pipelines.
-* **SonarQube Scanner** allows Jenkins to trigger code quality analysis.
-* **Docker** plugins enable image building and container management.
-* **Kubernetes** plugins allow Jenkins to deploy applications to Kubernetes clusters.
+* **jdk17** → Java runtime required by Jenkins and Java applications.
+* **maven3** → Build automation and dependency management tool.
+* **sonar-scanner** → Performs static code analysis and publishes results to SonarQube.
+* **docker** → Containerization platform used to build, run, and manage containers.
+* **Eclipse Temurin Installer** → Simplifies JDK installation and management.
+* **Config File Provider** → Used to create and manage files such as `settings.xml`.
+* **Pipeline Maven Integration** → Enables Maven builds within Jenkins Pipelines.
+* **SonarQube Scanner** → Allows Jenkins to trigger code quality analysis.
+* **Docker** and **Docker Pipeline** → Enable image creation and container management inside Jenkins Pipelines.
+* **Kubernetes**, **Kubernetes CLI**, **Kubernetes Client API**, and **Kubernetes Credentials** → Enable Jenkins integration with Kubernetes clusters.

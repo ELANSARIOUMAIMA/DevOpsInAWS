@@ -233,3 +233,60 @@ Configure the Docker installation to allow Jenkins pipelines to execute Docker c
 * **SonarQube Scanner** → Allows Jenkins to trigger code quality analysis.
 * **Docker** and **Docker Pipeline** → Enable image creation and container management inside Jenkins Pipelines.
 * **Kubernetes**, **Kubernetes CLI**, **Kubernetes Client API**, and **Kubernetes Credentials** → Enable Jenkins integration with Kubernetes clusters.
+
+## Install Trivy on the Jenkins VM
+
+Trivy is used to scan source code, container images, filesystems, and Kubernetes resources for vulnerabilities and misconfigurations.
+
+Create an installation script:
+
+```bash
+vi trivy.sh
+```
+
+Add the following commands to the script.
+
+### Install Required Dependencies
+
+```bash
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+```
+
+### Add the Trivy Repository Key
+
+```bash
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key \
+| gpg --dearmor \
+| sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+```
+
+### Add the Trivy Repository
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] \
+https://aquasecurity.github.io/trivy-repo/deb generic main" \
+| sudo tee -a /etc/apt/sources.list.d/trivy.list
+```
+
+### Install Trivy
+
+```bash
+sudo apt-get update
+sudo apt-get install trivy -y
+```
+
+### Verify the Installation
+
+```bash
+trivy --version
+```
+
+---
+
+## Notes
+
+* **Trivy** is a security scanner developed by Aqua Security.
+* It can scan container images, source code repositories, Kubernetes resources, and filesystems.
+* In Jenkins pipelines, Trivy is commonly used to perform vulnerability assessments before deploying applications.
+* The `-y` option automatically confirms installation prompts.
+

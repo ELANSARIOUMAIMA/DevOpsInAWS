@@ -97,3 +97,33 @@ docker ps
 
 * **SonarQube** will run inside a Docker container.
 * Using Docker simplifies deployment, upgrades, and maintenance.
+## Deploy SonarQube Container
+
+Start a SonarQube container using the Long-Term Support (LTS) Community edition.
+
+```bash
+docker run -d \
+--name sonar \
+-p 9000:9000 \
+sonarqube:lts-community
+```
+
+### Verify the Container Status
+
+```bash
+docker ps
+```
+
+### Access SonarQube
+
+Open a browser and navigate to:
+
+```text
+http://<VM_IP>:9000
+```
+
+Default credentials:
+
+* Username: `admin`
+* Password: `admin`
+

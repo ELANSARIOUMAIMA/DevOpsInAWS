@@ -150,3 +150,57 @@ Paste the retrieved password to complete the initial configuration.
 * The `-y` option automatically confirms installation prompts.
 * Docker is installed because Jenkins pipelines often build images, run containers, and interact with registries.
 * The default Jenkins port is **8080**.
+
+## Jenkins Configuration
+
+After installing Jenkins, several plugins must be added to support the CI/CD pipeline.
+
+### Required Plugins
+
+Install the following plugins from:
+
+**Manage Jenkins → Plugins**
+
+| Plugin                     | Purpose                                                                      |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| Eclipse Temurin Installer  | Automatically installs and manages multiple JDK versions                     |
+| Config File Provider       | Allows creation and management of configuration files such as `settings.xml` |
+| Pipeline Maven Integration | Integrates Maven builds with Jenkins Pipelines                               |
+| SonarQube Scanner          | Enables code analysis with SonarQube                                         |
+| Docker                     | Adds Docker support within Jenkins                                           |
+| Docker Pipeline            | Allows Docker commands inside Jenkins pipelines                              |
+| Kubernetes                 | Integrates Jenkins with Kubernetes                                           |
+| Kubernetes CLI             | Provides access to `kubectl` commands in pipelines                           |
+| Kubernetes Client API      | Enables communication with Kubernetes clusters                               |
+| Kubernetes Credentials     | Manages Kubernetes authentication credentials                                |
+
+---
+
+## Configure JDK
+
+Navigate to:
+
+```text
+Manage Jenkins
+    └── Tools
+         └── JDK Installations
+```
+
+Add a JDK configuration:
+
+```text
+Name: jdk17
+```
+
+Using the **Eclipse Temurin Installer** plugin, Jenkins can automatically download and manage JDK versions.
+
+---
+
+## Notes
+
+* The **Eclipse Temurin Installer** plugin simplifies JDK management.
+* **Config File Provider** is commonly used to create and manage Maven `settings.xml`.
+* **Pipeline Maven Integration** enables Maven builds within Jenkins Pipelines.
+* **SonarQube Scanner** allows Jenkins to trigger code quality analysis.
+* **Docker** plugins enable image building and container management.
+* **Kubernetes** plugins allow Jenkins to deploy applications to Kubernetes clusters.

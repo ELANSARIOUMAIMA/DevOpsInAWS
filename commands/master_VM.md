@@ -90,3 +90,56 @@ This ensures that all Kubernetes components use the same version (**v1.28.1**), 
 
 ```bash
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+
+
+## Configure kubectl Access (Master Node)
+
+After initializing the cluster, configure `kubectl` for the current user.
+
+Create the Kubernetes configuration directory:
+
+```bash
+mkdir -p $HOME/.kube
+```
+
+Copy the administrator configuration file:
+
+```bash
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+```
+
+Grant ownership of the configuration file to the current user:
+
+```bash
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+---
+
+## Install the Calico CNI Plugin
+
+Deploy Calico to enable networking between Pods in the cluster.
+
+```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```
+
+**Note:** A Container Network Interface (CNI) plugin is required because Kubernetes does not provide Pod networking by default.
+
+---
+
+## Install the NGINX Ingress Controller
+
+Deploy the NGINX Ingress Controller for external access to services.
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/baremetal/deploy.yaml
+```
+
+### Purpose
+
+* **Calico** → Provides Pod-to-Pod networking across the cluster.
+* **Ingress NGINX** → Manages incoming HTTP/HTTPS traffic and routes it to Kubernetes Services.
+* **kubectl configuration** → Allows the current user to interact with the cluster without using `sudo`.
+

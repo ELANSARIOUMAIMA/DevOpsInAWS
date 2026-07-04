@@ -96,3 +96,39 @@ docker ps
 
 * **Nexus Repository Manager** will also run inside a Docker container.
 * Using Docker simplifies deployment, upgrades, and maintenance.
+## Deploy Nexus Repository Manager
+
+Start a Nexus Repository Manager container.
+
+```bash
+docker run -d \
+--name nexus \
+-p 8081:8081 \
+sonatype/nexus3
+```
+
+### Verify the Container Status
+
+```bash
+docker ps
+```
+
+### Access Nexus
+
+Open a browser and navigate to:
+
+```text
+http://<VM_IP>:8081
+```
+
+Retrieve the initial administrator password:
+
+```bash
+docker exec nexus cat /nexus-data/admin.password
+```
+
+Login with:
+
+* Username: `admin`
+* Password: *(value returned by the previous command)*
+

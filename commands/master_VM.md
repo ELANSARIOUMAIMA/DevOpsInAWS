@@ -200,6 +200,201 @@ kubeaudit all
 * Trivy and kubeaudit are complementary tools and can both be used in Kubernetes security assessments.
 
 
+# Jenkins Access Configuration for Kubernetes
+
+To allow Jenkins to deploy applications into the Kubernetes cluster, a dedicated **ServiceAccount**, **Role**, **RoleBinding**, and **Secret** are created.
+
+---
+
+## 1. Create a Namespace
+
+Create a dedicated namespace where applications will be deployed.
+
+```bash
+kubectl create ns webapps
+```
+
+---
+
+## 2. Create a Service Account
+
+A ServiceAccount represents a separate identity inside Kubernetes that Jenkins will use for deployments.
+
+Create `svc.yaml`:
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins
+  namespace: webapps
+```
+
+Apply the manifest:
+
+```bash
+kubectl apply -f svc.yaml
+```
+
+### Notes
+
+* `jenkins` is the ServiceAccount name.
+* It will perform deployments inside the `webapps` namespace.
+* This creates a dedicated Kubernetes user for Jenkins.
+
+---
+
+## 3. Create a Role
+
+A Role defines the permissions granted within a namespace.
+
+Create `role.yaml`:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+metadata:
+  name: jenkins-role
+  namespace: webapps
+
+rules:
+- apiGroups:
+  - ""
+  - apps
+  - autoscaling
+  - batch
+  - extensions
+  - policy
+  - rbac.authorization.k8s.io
+
+  resources:
+  - pods
+  - secrets
+  - configmaps
+  - daemonsets
+  - deployments
+  - events
+  - endpoints
+  - horizontalpodautoscalers
+  - ingresses
+  - jobs
+  - limitranges
+  - namespaces
+  - nodes
+  - persistentvolumes
+  - persistentvolumeclaims
+  - resourcequotas
+  - replicasets
+  - replicationcontrollers
+  - serviceaccounts
+  - services
+
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+```
+
+Apply the Role:
+
+```bash
+kubectl apply -f role.yaml
+```
+
+### Notes
+
+The role allows Jenkins to:
+
+* Get resources
+* List resources
+* Watch resources
+* Create resources
+* Update resources
+* Patch resources
+* Delete resources
+
+---
+
+## 4. Create a RoleBinding
+
+A RoleBinding associates the Role with the Jenkins ServiceAccount.
+
+Create `bind.yaml`:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+metadata:
+  name: jenkins-rolebinding
+  namespace: webapps
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: jenkins-role
+
+subjects:
+- kind: ServiceAccount
+  name: jenkins
+  namespace: webapps
+```
+
+Apply the binding:
+
+```bash
+kubectl apply -f bind.yaml
+```
+
+### Notes
+
+The RoleBinding grants the permissions defined in `jenkins-role` to the `jenkins` ServiceAccount.
+
+This enables Jenkins to interact with the Kubernetes cluster and deploy applications inside the `webapps` namespace.
+
+---
+
+## 5. Create a Service Account Token
+
+Create `secret.yaml`:
+
+```yaml
+apiVersion: v1
+kind: Secret
+
+type: kubernetes.io/service-account-token
+
+metadata:
+  name: mysecretname
+
+  annotations:
+    kubernetes.io/service-account.name: jenkins
+```
+
+Apply the secret:
+
+```bash
+kubectl apply -f secret.yaml -n webapps
+```
+
+Retrieve the generated token:
+
+```bash
+kubectl describe secret mysecretname -n webapps
+```
+
+### Notes
+
+* The token will later be added to Jenkins as Kubernetes credentials.
+* Jenkins uses this token to authenticate against the Kubernetes API Server.
+* The ServiceAccount, Role, RoleBinding, and Secret together implement Kubernetes RBAC for Jenkins deployments.
+
+
 
 
 

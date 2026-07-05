@@ -173,6 +173,7 @@ Install the following plugins from:
 | Kubernetes CLI             | Provides access to `kubectl` commands in pipelines                           |
 | Kubernetes Client API      | Enables communication with Kubernetes clusters                               |
 | Kubernetes Credentials     | Manages Kubernetes authentication credentials                                |
+| Prometheus Metric    | Exposes Jenkins metrics in a format that Prometheus can scrape                                |
 
 ---
 

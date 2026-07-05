@@ -289,4 +289,51 @@ trivy --version
 * It can scan container images, source code repositories, Kubernetes resources, and filesystems.
 * In Jenkins pipelines, Trivy is commonly used to perform vulnerability assessments before deploying applications.
 * The `-y` option automatically confirms installation prompts.
+## Install kubectl on the Jenkins VM
+
+Jenkins pipelines may execute Kubernetes commands such as `kubectl apply`, `kubectl get pods`, or `kubectl rollout status`. Therefore, `kubectl` must be installed on the Jenkins server.
+
+Create an installation script:
+
+```bash
+vi kubectl.sh
+```
+
+Add the following commands:
+
+```bash
+curl -o kubectl \
+https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin
+
+kubectl version --short --client
+```
+
+Make the script executable:
+
+```bash
+sudo chmod +x kubectl.sh
+```
+
+Run the script:
+
+```bash
+./kubectl.sh
+```
+
+### Verification
+
+```bash
+kubectl version --short --client
+```
+
+### Notes
+
+* **kubectl** is the command-line tool used to interact with Kubernetes clusters.
+* Jenkins uses `kubectl` in pipelines to deploy and manage Kubernetes resources.
+* Installing `kubectl` on the Jenkins VM allows Jenkins jobs to communicate with the Kubernetes API Server.
+* Ensure that the `kubectl` version is compatible with the Kubernetes cluster version.
 

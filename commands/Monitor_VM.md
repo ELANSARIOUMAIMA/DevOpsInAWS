@@ -252,4 +252,61 @@ Restart Prometheus:
 * Prometheus runs by default on port **9090**.
 * Grafana runs by default on port **3000**.
 * Blackbox Exporter is useful for monitoring application availability and uptime.
+## Update the Prometheus Configuration
+
+After installing **Node Exporter** on the Jenkins VM and enabling the **Prometheus Metrics Plugin** in Jenkins, Prometheus must be configured to scrape these metrics.
+
+Navigate to the Prometheus directory:
+
+```bash
+cd prometheus-3.10.0.linux-amd64
+```
+
+Edit the Prometheus configuration file:
+
+```bash
+vi prometheus.yml
+```
+
+Add the following jobs inside the `scrape_configs` section:
+
+```yaml
+- job_name: 'node_exporter'
+  static_configs:
+    - targets:
+      - '<JENKINS_IP>:9100'
+
+- job_name: 'jenkins'
+  metrics_path: /prometheus
+  static_configs:
+    - targets:
+      - '<JENKINS_IP>:8080'
+```
+
+### Restart Prometheus
+
+Locate the running Prometheus process:
+
+```bash
+pgrep prometheus
+```
+
+Stop the process:
+
+```bash
+kill <PID>
+```
+
+Start Prometheus again:
+
+```bash
+./prometheus &
+```
+
+### Notes
+
+* **Node Exporter** exposes infrastructure metrics on port **9100**.
+* The **Prometheus Metrics Plugin** exposes Jenkins metrics at `/prometheus`.
+* Prometheus periodically scrapes these endpoints and stores the collected metrics.
+* Grafana can then be used to visualize Jenkins and system metrics through dashboards.
 

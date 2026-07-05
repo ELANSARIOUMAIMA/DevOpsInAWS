@@ -344,19 +344,19 @@ Node Exporter exposes system-level metrics such as CPU usage, memory consumption
 Download Node Exporter:
 
 ```bash
-wget https://github.com/prometheus/node_exporter/releases/latest/download/node_exporter-*.linux-amd64.tar.gz
+wget https://github.com/prometheus/node_exporter/releases/latest/download/node_exporter-1.7.0.linux-amd64.tar.gz
 ```
 
 Extract the archive:
 
 ```bash
-tar -xvf node_exporter-*.linux-amd64.tar.gz
+tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz
 ```
 
 Navigate to the extracted directory:
 
 ```bash
-cd node_exporter-*.linux-amd64
+cd node_exporter-1.7.0.linux-amd64
 ```
 
 Start Node Exporter:

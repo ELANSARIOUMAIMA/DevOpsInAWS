@@ -90,8 +90,13 @@ This ensures that all Kubernetes components use the same version (**v1.28.1**), 
 
 ```bash
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+```
+### Notes
 
-
+* `kubeadm init` initializes the Kubernetes control plane.
+* `--pod-network-cidr=10.244.0.0/16` defines the Pod network range used by the CNI plugin.
+* The chosen CIDR must match the networking solution being installed.
+* Calico commonly supports `10.244.0.0/16`.
 
 ## Configure kubectl Access (Master Node)
 
@@ -376,10 +381,16 @@ metadata:
     kubernetes.io/service-account.name: jenkins
 ```
 
+
 Apply the secret:
 
 ```bash
 kubectl apply -f secret.yaml -n webapps
+```
+### Notes
+But modern Kubernetes versions often generate tokens dynamically using:
+```bash
+kubectl create token jenkins -n webapps
 ```
 
 Retrieve the generated token:

@@ -119,3 +119,137 @@ Password: admin
 * Grafana listens on port **3000** by default.
 * Running Prometheus with `&` keeps it executing in the background.
 * Opening ports in the range **3000–10000** is useful because many DevOps tools expose web interfaces within this interval.
+# Install Blackbox Exporter
+
+Blackbox Exporter enables Prometheus to monitor the availability of external services, websites, APIs, and applications through HTTP, HTTPS, TCP, DNS, and ICMP probes.
+
+## Download Blackbox Exporter
+
+```bash
+wget https://github.com/prometheus/blackbox_exporter/releases/download/v0.28.0/blackbox_exporter-0.28.0.linux-amd64.tar.gz
+```
+
+## Extract the Archive
+
+```bash
+tar -xvf blackbox_exporter-0.28.0.linux-amd64.tar.gz
+```
+
+Remove the downloaded archive:
+
+```bash
+rm -rf blackbox_exporter-0.28.0.linux-amd64.tar.gz
+```
+
+Navigate to the extracted directory:
+
+```bash
+cd blackbox_exporter-0.28.0.linux-amd64
+```
+
+Verify the contents:
+
+```bash
+ls
+```
+
+## Start Blackbox Exporter
+
+```bash
+./blackbox_exporter &
+```
+
+> The `&` symbol runs the exporter in the background.
+
+By default, Blackbox Exporter listens on port **9115**.
+
+Access it through:
+
+```text
+http://<MONITOR_VM_IP>:9115
+```
+
+---
+
+# Configure Prometheus
+
+Return to the Prometheus directory:
+
+```bash
+cd ..
+cd prometheus-3.10.0.linux-amd64
+```
+
+Edit the configuration file:
+
+```bash
+vi prometheus.yml
+```
+
+Add the following section inside `scrape_configs`:
+
+```yaml
+- job_name: 'blackbox'
+
+  metrics_path: /probe
+
+  params:
+    module: [http_2xx]
+
+  static_configs:
+    - targets:
+      - http://prometheus.io
+      - http://54.89.4.235:31740
+
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+
+    - source_labels: [__param_target]
+      target_label: instance
+
+    - target_label: __address__
+      replacement: 13.218.215.242:9115
+```
+
+### Explanation
+
+* `http_2xx` checks whether the target responds with an HTTP 200 status code.
+* `targets` specifies the endpoints to monitor.
+* `replacement` indicates the address of the Blackbox Exporter instance.
+* Prometheus sends probe requests to Blackbox Exporter, which then probes the target systems.
+
+---
+
+# Restart Prometheus
+
+Find the running Prometheus process:
+
+```bash
+pgrep prometheus
+```
+
+Terminate the process:
+
+```bash
+kill <PID>
+```
+
+Restart Prometheus:
+
+```bash
+./prometheus &
+```
+
+---
+
+## Notes
+
+* **Prometheus** collects metrics.
+* **Blackbox Exporter** performs active probing of endpoints.
+* **Grafana** visualizes collected metrics.
+* Blackbox Exporter runs by default on port **9115**.
+* Prometheus runs by default on port **9090**.
+* Grafana runs by default on port **3000**.
+* Blackbox Exporter is useful for monitoring application availability and uptime.
+

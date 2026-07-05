@@ -337,4 +337,53 @@ kubectl version --short --client
 * Jenkins uses `kubectl` in pipelines to deploy and manage Kubernetes resources.
 * Installing `kubectl` on the Jenkins VM allows Jenkins jobs to communicate with the Kubernetes API Server.
 * Ensure that the `kubectl` version is compatible with the Kubernetes cluster version.
+## Install Node Exporter
+
+Node Exporter exposes system-level metrics such as CPU usage, memory consumption, disk utilization, and network statistics.
+
+Download Node Exporter:
+
+```bash
+wget https://github.com/prometheus/node_exporter/releases/latest/download/node_exporter-*.linux-amd64.tar.gz
+```
+
+Extract the archive:
+
+```bash
+tar -xvf node_exporter-*.linux-amd64.tar.gz
+```
+
+Navigate to the extracted directory:
+
+```bash
+cd node_exporter-*.linux-amd64
+```
+
+Start Node Exporter:
+
+```bash
+./node_exporter &
+```
+
+Verify that Node Exporter is running:
+
+```bash
+curl localhost:9100/metrics
+```
+
+Node Exporter exposes metrics on port **9100** by default.
+
+Access the metrics endpoint:
+
+```text
+http://<JENKINS_IP>:9100
+```
+
+### Notes
+
+* **Node Exporter** collects operating system metrics from the Jenkins VM.
+* Prometheus scrapes these metrics periodically.
+* The default port for Node Exporter is **9100**.
+* Grafana dashboards can be built using the collected Node Exporter metrics.
+
 
